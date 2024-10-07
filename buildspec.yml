@@ -9,18 +9,12 @@ phases:
       - export CODE_VERSION=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
-      - echo Building the Docker image...
-      - docker build -t nr-registry-test:${CODE_VERSION} .
-      - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
-      - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
+      - echo Using existing image from ECR...
+      - echo No need to build a new image.
   post_build:
     commands:
-      - echo Pushing the Docker image to ECR...
-      - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
-      - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
       - echo Writing image definition file for ECS deployment...
-      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > imagedefinitions.json
-
+      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest > imagedefinitions.json
 
 artifacts:
   files:
