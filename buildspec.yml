@@ -1,4 +1,4 @@
- version: 0.2
+version: 0.2
 
 phases:
   pre_build:
@@ -10,16 +10,16 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t nr-php:${CODE_VERSION} .
-      - docker tag nr-php:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
-      - docker tag nr-php:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
+      - docker build -t nr-registry-test:${CODE_VERSION} .
+      - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
+      - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
       - echo Writing image definition file for ECS deployment...
-      - printf '[{"name":"nr-php","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > imagedefinitions.json
+      - printf '[{"name":"nr-registry-test","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > imagedefinitions.json
 
 artifacts:
   files:
