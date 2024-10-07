@@ -19,7 +19,8 @@ phases:
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
       - echo Writing image definition file for ECS deployment...
-      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:ef8878e > imagedefinitions.json
+      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > imagedefinitions.json
+
 
 artifacts:
   files:
