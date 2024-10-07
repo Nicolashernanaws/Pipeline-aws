@@ -25,7 +25,7 @@
 <body>
     <div class="content">
         <?php
-        echo "Hello World!aaa<br>";
+        echo "Hello World!<br>";
         echo "Server: " . gethostname() . "<br>";
         echo "Web server #" . getenv('SERVER_ID');
         ?>
