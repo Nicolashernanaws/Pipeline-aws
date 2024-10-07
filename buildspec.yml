@@ -7,9 +7,6 @@ phases:
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
       - echo Getting the code version...
       - export CODE_VERSION=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - echo "ECR_REGISTRY: $ECR_REGISTRY"
-      - echo "ECR_REPOSITORY: $ECR_REPOSITORY"
-      - echo "CODE_VERSION: $CODE_VERSION"
   build:
     commands:
       - echo Building the Docker image...
@@ -22,7 +19,7 @@ phases:
       - docker push $ECR_REGISTRY/$ECR_REPOSITORY:${CODE_VERSION}
       - docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
       - echo Writing image definition file for ECS deployment...
-      - printf '[{"name":"ag-php","imageUri":"%s"}]' $ECR_REGISTRY/$ECR_REPOSITORY:${CODE_VERSION} > imagedefinitions.json
+      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' $ECR_REGISTRY/$ECR_REPOSITORY:${CODE_VERSION} > imagedefinitions.json
 
 artifacts:
   files:
