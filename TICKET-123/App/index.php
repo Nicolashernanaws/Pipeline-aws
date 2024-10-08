@@ -25,7 +25,7 @@
 <body>
     <div class="content">
         <?php
-        echo "Hello World TeraCloud!<br>";
+        echo "Hello World, TeraCloud!<br>";
         echo "Server: " . gethostname() . "<br>";
         echo "Web server #" . getenv('SERVER_ID');
         ?>
