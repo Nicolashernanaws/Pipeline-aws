@@ -1,29 +1,32 @@
 version: 0.2
 
+env:
+  variables:
+    ECR_REGISTRY: "253490770873.dkr.ecr.us-east-2.amazonaws.com"  # Usa la variable de entorno
+    ECR_REPOSITORY: "nr-registry-test"  # Usa la variable de entorno
+
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 253490770873.dkr.ecr.us-east-2.amazonaws.com
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
       - echo Getting the code version...
       - export CODE_VERSION=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
    
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t nr-registry-test:${CODE_VERSION} -f ./TICKET-123/Docker/Dockerfile ./TICKET-123
-      - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
-      - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
+      - docker build -t $ECR_REPOSITORY:${CODE_VERSION} -f ./TICKET-123/Docker/Dockerfile ./TICKET-123
+      - docker tag $ECR_REPOSITORY:${CODE_VERSION} $ECR_REGISTRY/$ECR_REPOSITORY:${CODE_VERSION}
+      
 
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
-      - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
-      - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
+      - docker push $ECR_REGISTRY/$ECR_REPOSITORY:${CODE_VERSION}
       - echo Writing image definition file for ECS deployment...
-      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > cloned-imagedefinitions.json  # Nombre único para evitar conflicto con el pipeline original
+      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' $ECR_REGISTRY/$ECR_REPOSITORY:${CODE_VERSION} > imagedefinitions.json
 
 artifacts:
   files:
-    - cloned-imagedefinitions.json
-
+    - imagedefinitions.json
