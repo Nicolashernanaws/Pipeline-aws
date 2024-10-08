@@ -7,10 +7,11 @@ phases:
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 253490770873.dkr.ecr.us-east-2.amazonaws.com
       - echo Getting the code version...
       - export CODE_VERSION=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+   
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t nr-registry-test:${CODE_VERSION} -f docker/dockerfile .
+      - docker build -t nr-registry-test:${CODE_VERSION} ./TICKET-123/Docker  # Ruta ajustada
       - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
       - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
   post_build:
@@ -19,8 +20,9 @@ phases:
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
       - echo Writing image definition file for ECS deployment...
-      - printf '[{"name":"nr-registry-test","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > imagedefinitions.json
+      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > ../imagedefinitions.json  # Ruta ajustada
 
 artifacts:
   files:
     - imagedefinitions.json
+
