@@ -11,7 +11,7 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t nr-registry-test:${CODE_VERSION} ./TICKET-123/Docker  # Ruta ajustada
+      - docker build -t nr-registry-test:${CODE_VERSION} ./TICKET-123
       - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
       - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
   post_build:
