@@ -7,7 +7,9 @@ phases:
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
       - echo Getting the code version...
       - export CODE_VERSION=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - echo CODE_VERSION is $CODE_VERSION  # Comando de depuración para mostrar el valor de CODE_VERSION
+      - echo CODE_VERSION is $CODE_VERSION
+      - echo ECR_REGISTRY is $ECR_REGISTRY  # Comando de depuración para mostrar el valor de ECR_REGISTRY
+      - echo ECR_REPOSITORY is $ECR_REPOSITORY  # Comando de depuración para mostrar el valor de ECR_REPOSITORY
   build:
     commands:
       - echo Building the Docker image...
@@ -25,4 +27,5 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
