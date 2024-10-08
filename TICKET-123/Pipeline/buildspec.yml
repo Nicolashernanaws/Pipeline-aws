@@ -14,14 +14,16 @@ phases:
       - docker build -t nr-registry-test:${CODE_VERSION} -f ./TICKET-123/Docker/Dockerfile ./TICKET-123
       - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
       - docker tag nr-registry-test:${CODE_VERSION} 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
+
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION}
       - docker push 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:latest
       - echo Writing image definition file for ECS deployment...
-      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > ../imagedefinitions.json  # Ruta ajustada
+      - printf '[{"name":"php-container-nc","imageUri":"%s"}]' 253490770873.dkr.ecr.us-east-2.amazonaws.com/nr-registry-test:${CODE_VERSION} > cloned-imagedefinitions.json  # Nombre único para evitar conflicto con el pipeline original
 
 artifacts:
   files:
-    - imagedefinitions.json
+    - cloned-imagedefinitions.json
+
