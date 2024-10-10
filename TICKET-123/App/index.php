@@ -56,7 +56,7 @@
     </div>
     <div class="content">
         <?php
-        echo "Hello TeraWorld! 🚀<br>";
+        echo "Hello Santi y  Leo 🚀<br>";
         echo "The server is running smoothly!<br>";
         echo "<span class='server-info'>Server: " . gethostname() . " 💻</span><br>";
 
